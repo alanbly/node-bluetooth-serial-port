@@ -19,7 +19,7 @@
 @synthesize device;
 @synthesize channel;
 
-+ (bool)publishService:(BluetoothRFCOMMChannelID*)mServerChannelID :(BluetoothSDPServiceRecordHandle*)mServerHandle
++ (void)publishService:(BluetoothRFCOMMChannelID*)mServerChannelID :(BluetoothSDPServiceRecordHandle*)mServerHandle
 {
     NSString            *dictionaryPath = nil;
     NSString            *serviceName = nil;

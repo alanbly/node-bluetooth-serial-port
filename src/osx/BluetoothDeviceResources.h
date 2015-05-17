@@ -28,7 +28,7 @@
 @property (nonatomic, retain) IOBluetoothDevice *device;
 @property (nonatomic, retain) IOBluetoothRFCOMMChannel *channel;
 
-+ (bool)publishService:(BluetoothRFCOMMChannelID*)mServerChannelID :(BluetoothSDPServiceRecordHandle*)mServerHandle;
++ (void)publishService:(BluetoothRFCOMMChannelID*)mServerChannelID :(BluetoothSDPServiceRecordHandle*)mServerHandle;
 
 @end
 

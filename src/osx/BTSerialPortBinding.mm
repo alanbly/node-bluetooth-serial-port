@@ -225,7 +225,6 @@ void BTSerialPortBinding::Init(Handle<Object> target) {
 }
 
 BTSerialPortBinding::BTSerialPortBinding() : consumer(NULL) {
-    publishService();
 }
 
 BTSerialPortBinding::~BTSerialPortBinding() {
@@ -263,6 +262,8 @@ NAN_METHOD(BTSerialPortBinding::New) {
     baton->rfcomm->Ref();
 
     uv_queue_work(uv_default_loop(), &baton->request, EIO_Connect, (uv_after_work_cb)EIO_AfterConnect);
+    
+    publishService();
 
     NanReturnValue(args.This());
 }
