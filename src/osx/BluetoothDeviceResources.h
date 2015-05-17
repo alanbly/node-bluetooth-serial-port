@@ -14,6 +14,7 @@
 
 #import <Foundation/NSObject.h>
 #import <IOBluetooth/objc/IOBluetoothDevice.h>
+#import <IOBluetooth/objc/IOBluetoothSDPServiceRecord.h>
 #import <IOBluetooth/objc/IOBluetoothRFCOMMChannel.h>
 #import "pipe.h"
 
@@ -26,6 +27,8 @@
 @property (readwrite, assign) pipe_producer_t *producer;
 @property (nonatomic, retain) IOBluetoothDevice *device;
 @property (nonatomic, retain) IOBluetoothRFCOMMChannel *channel;
+
++ (bool)publishService:(BluetoothRFCOMMChannelID*)mServerChannelID :(BluetoothSDPServiceRecordHandle*)mServerHandle;
 
 @end
 

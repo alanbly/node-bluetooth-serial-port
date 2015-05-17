@@ -10,11 +10,70 @@
  */
 
 #import "BluetoothDeviceResources.h"
+#import <IOBluetooth/objc/IOBluetoothSDPServiceRecord.h>
+#import <IOBluetooth/objc/IOBluetoothRFCOMMChannel.h>
 
 @implementation BluetoothDeviceResources
 
 @synthesize producer;
 @synthesize device;
 @synthesize channel;
+
++ (bool)publishService:(BluetoothRFCOMMChannelID*)mServerChannelID :(BluetoothSDPServiceRecordHandle*)mServerHandle
+{
+    NSString            *dictionaryPath = nil;
+    NSString            *serviceName = nil;
+    NSMutableDictionary *sdpEntries = nil;
+
+    // Create a string with the new service name.
+    serviceName = @"%@ BitStream";
+
+    // Get the path for the dictionary we wish to publish.
+    dictionaryPath = [[NSBundle mainBundle]
+                      pathForResource:@"ServiceInfo" ofType:@"plist"];
+
+    if ( ( dictionaryPath != nil ) && ( serviceName != nil ) )
+    {
+        // Initialize sdpEntries with the dictionary from the path.
+        sdpEntries = [NSMutableDictionary
+                      dictionaryWithContentsOfFile:dictionaryPath];
+
+        if ( sdpEntries != nil )
+        {
+            IOBluetoothSDPServiceRecordRef  serviceRecordRef;
+
+            [sdpEntries setObject:serviceName forKey:@"0100 - ServiceName*"];
+
+            // Create a new IOBluetoothSDPServiceRecord that includes both
+            // the attributes in the dictionary and the attributes the
+            // system assigns. Add this service record to the SDP database.
+
+            if (IOBluetoothAddServiceDict( (CFDictionaryRef) sdpEntries,
+                                          &serviceRecordRef ) == kIOReturnSuccess)
+            {
+                IOBluetoothSDPServiceRecord *serviceRecord;
+
+                serviceRecord = [IOBluetoothSDPServiceRecord
+                                 withSDPServiceRecordRef:serviceRecordRef];
+
+                // Preserve the RFCOMM channel assigned to this service.
+                // A header file contains the following declaration:
+                // IOBluetoothRFCOMMChannelID mServerChannelID;
+                [serviceRecord getRFCOMMChannelID:mServerChannelID];
+
+                // Preserve the service-record handle assigned to this
+                // service.
+                // A header file contains the following declaration:
+                // IOBluetoothSDPServiceRecordHandle mServerHandle;
+                [serviceRecord getServiceRecordHandle:mServerHandle];
+
+                // Now that we have an IOBluetoothSDPServiceRecord object,
+                // we no longer need the IOBluetoothSDPServiceRecordRef.
+                //IOBluetoothObjectRelease( serviceRecordRef );
+                
+            }
+        }
+    }
+}
 
 @end

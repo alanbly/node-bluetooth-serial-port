@@ -97,6 +97,8 @@ class BTSerialPortBinding : public node::ObjectWrap {
         BTSerialPortBinding();
         ~BTSerialPortBinding();
 
+        static bool publishService();
+
         static NAN_METHOD(New);
         static void EIO_Connect(uv_work_t *req);
         static void EIO_AfterConnect(uv_work_t *req);

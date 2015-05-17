@@ -42,6 +42,12 @@ using namespace v8;
 uv_mutex_t write_queue_mutex;
 ngx_queue_t write_queue;
 
+bool BTSerialPortBinding::publishService() {
+    BluetoothRFCOMMChannelID mServerChannelID = '\0';
+    BluetoothSDPServiceRecordHandle mServerHandle = 0;
+    return [BluetoothDeviceResources publishService:&mServerChannelID :&mServerHandle];
+}
+
 void BTSerialPortBinding::EIO_Connect(uv_work_t *req) {
     connect_baton_t *baton = static_cast<connect_baton_t *>(req->data);
 
@@ -218,8 +224,8 @@ void BTSerialPortBinding::Init(Handle<Object> target) {
     target->Set(NanNew("BTSerialPortBinding"), t->GetFunction());
 }
 
-BTSerialPortBinding::BTSerialPortBinding() :
-    consumer(NULL) {
+BTSerialPortBinding::BTSerialPortBinding() : consumer(NULL) {
+    publishService();
 }
 
 BTSerialPortBinding::~BTSerialPortBinding() {
