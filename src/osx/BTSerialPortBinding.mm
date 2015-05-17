@@ -45,7 +45,8 @@ ngx_queue_t write_queue;
 bool BTSerialPortBinding::publishService() {
     BluetoothRFCOMMChannelID mServerChannelID = '\0';
     BluetoothSDPServiceRecordHandle mServerHandle = 0;
-    return [BluetoothDeviceResources publishService:&mServerChannelID :&mServerHandle];
+    [BluetoothDeviceResources publishService:&mServerChannelID :&mServerHandle];
+    return true;
 }
 
 void BTSerialPortBinding::EIO_Connect(uv_work_t *req) {
@@ -262,7 +263,7 @@ NAN_METHOD(BTSerialPortBinding::New) {
     baton->rfcomm->Ref();
 
     uv_queue_work(uv_default_loop(), &baton->request, EIO_Connect, (uv_after_work_cb)EIO_AfterConnect);
-    
+
     publishService();
 
     NanReturnValue(args.This());
