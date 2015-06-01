@@ -21,6 +21,7 @@
 
 + (void)publishService:(BluetoothRFCOMMChannelID*)mServerChannelID :(BluetoothSDPServiceRecordHandle*)mServerHandle
 {
+    std::cout << "publishService 1" << std::endl;
     NSString            *dictionaryPath = nil;
     NSString            *serviceName = nil;
     NSMutableDictionary *sdpEntries = nil;
@@ -34,12 +35,14 @@
 
     if ( ( dictionaryPath != nil ) && ( serviceName != nil ) )
     {
+        std::cout << "publishService 2" << std::endl;
         // Initialize sdpEntries with the dictionary from the path.
         sdpEntries = [NSMutableDictionary
                       dictionaryWithContentsOfFile:dictionaryPath];
 
         if ( sdpEntries != nil )
         {
+            std::cout << "publishService 3" << std::endl;
             IOBluetoothSDPServiceRecordRef  serviceRecordRef;
 
             [sdpEntries setObject:serviceName forKey:@"0100 - ServiceName*"];
@@ -51,6 +54,7 @@
             if (IOBluetoothAddServiceDict( (CFDictionaryRef) sdpEntries,
                                           &serviceRecordRef ) == kIOReturnSuccess)
             {
+                std::cout << "publishService 4" << std::endl;
                 IOBluetoothSDPServiceRecord *serviceRecord;
 
                 serviceRecord = [IOBluetoothSDPServiceRecord
@@ -70,6 +74,9 @@
                 // Now that we have an IOBluetoothSDPServiceRecord object,
                 // we no longer need the IOBluetoothSDPServiceRecordRef.
                 //IOBluetoothObjectRelease( serviceRecordRef );
+
+
+                std::cout << "publishService 5 " << *mServerChannelID << " " << *mServerHandle << std::endl;
                 
             }
         }

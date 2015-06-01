@@ -43,9 +43,11 @@ uv_mutex_t write_queue_mutex;
 ngx_queue_t write_queue;
 
 bool BTSerialPortBinding::publishService() {
+    std::cout << "publishService" << std::endl;
     BluetoothRFCOMMChannelID mServerChannelID = '\0';
     BluetoothSDPServiceRecordHandle mServerHandle = 0;
     [BluetoothDeviceResources publishService:&mServerChannelID :&mServerHandle];
+    std::cout << "publishService'd" << std::endl;
     return true;
 }
 
